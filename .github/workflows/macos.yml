@@ -1,0 +1,9 @@
+name: main
+on: [push]
+jobs:
+  build:
+    runs-on: m1
+    steps:
+      - name: Hello, world!
+        run: |
+          echo Hello, world!
