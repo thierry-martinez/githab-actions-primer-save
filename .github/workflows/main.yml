@@ -6,7 +6,6 @@ jobs:
     steps:
       - name: Preparing the environment
         run: |
-          sudo add-apt-repository universe
           sudo curl -sSL \
             https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
             -o /usr/share/keyrings/ros-archive-keyring.gpg
