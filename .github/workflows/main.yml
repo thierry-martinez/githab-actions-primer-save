@@ -18,4 +18,4 @@ jobs:
           . /opt/ros/humble/setup.sh
           ros2 run demo_nodes_cpp talker &
           ros2 run demo_nodes_cpp listener &
-          sleep 1000 && killall ros2
+          sleep 1 && killall ros2
