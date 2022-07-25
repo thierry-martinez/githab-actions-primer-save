@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Preparing the environment
-      - run: |
+        run: |
           sudo curl -sSL \
             https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
             -o /usr/share/keyrings/ros-archive-keyring.gpg
@@ -13,7 +13,7 @@ jobs:
           sudo apt update
           sudo apt install ros-humble-ros-base
       - name: Talker/listener example
-      - run: |
+        run: |
           . /opt/ros/humble/setup.sh
           ros2 run demo_nodes_cpp talker &
           ros2 run demo_nodes_cpp listener &
