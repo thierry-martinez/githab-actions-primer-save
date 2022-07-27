@@ -1,7 +1,7 @@
 name: main
 on: [push]
 jobs:
-  build image:
+  build-image:
     runs-on: ubuntu-latest
     steps:
       - name: Login to GitHub Container Registry
