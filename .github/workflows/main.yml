@@ -4,13 +4,14 @@ jobs:
   check-image-changed:
     runs-on: ubuntu-latest
     outputs:
-      image_changed: ${{ steps.check-image-changed.outputs.image-changed}}
+      image_changed: ${{ steps.check-changed.outputs.image-changed}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 2
-      - name: Check changed
+      - id: check-changed
+        name: Check changed
         run: |
           if git diff --quiet --exit-code HEAD^ HEAD -- \
             dockerfiles/ros-humble/Dockerfile; then
