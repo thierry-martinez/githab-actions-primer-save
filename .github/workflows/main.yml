@@ -23,8 +23,10 @@ jobs:
   build-image:
     runs-on: ubuntu-latest
     needs: [check-image-changed]
-    if: needs.check-image-changed.outputs.image-changed == 1
     steps:
+      - name: Echo image changed
+        run: |
+          echo Changed: ${{ needs.check-image-changed.outputs.image-changed }}
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build
