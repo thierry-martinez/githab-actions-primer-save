@@ -85,20 +85,25 @@ jobs:
         with:
           files: my_package.tar.gz
 
-#  build-windows:
-#    runs-on: windows-latest
-#    steps:
-#      - name: Downloading ROS
-#        run: |
-#          curl -o ros2-humble.zip -L https://github.com/ros2/ros2/releases/download/release-humble-20220523/ros2-humble-20220523-windows-release-amd64.zip
-#          7z x ros2-humble.zip
-#      - name: Installing prerequisites
-#        run: |
-#          choco install -y python --version 3.8.3
-#          choco install -y vcredist2013 vcredist140
-#          choco install -y visualstudio2019community --execution-timeout=0
-#          choco install -y visualstudio2019-workload-nativedesktop
-#          choco install -y cmake
-#      - name: Setup ROS
-#        run: |
-#          ros2-windows/setup.bat
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Downloading ROS
+        run: |
+          curl -o ros2-humble.zip -L https://github.com/ros2/ros2/releases/download/release-humble-20220523/ros2-humble-20220523-windows-release-amd64.zip
+          7z x ros2-humble.zip
+      - name: Installing prerequisites
+        run: |
+          choco install -y python --version 3.8.3
+          choco install -y vcredist2013 vcredist140
+          choco install -y visualstudio2019community --execution-timeout=0
+          choco install -y visualstudio2019-workload-nativedesktop
+          choco install -y cmake
+          pip install -U colcon-common-extensions
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup ROS
+        run: |
+          ros2-windows/setup.bat
+          cd src
+          colcon build
