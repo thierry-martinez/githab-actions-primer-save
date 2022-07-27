@@ -12,9 +12,12 @@ jobs:
           fetch-depth: 2
       - name: Check changed
         run: |
-          git diff --quiet --exit-code HEAD^ HEAD -- \
-            dockerfiles/ros-humble/Dockerfile
-          changed=$?
+          if git diff --quiet --exit-code HEAD^ HEAD -- \
+            dockerfiles/ros-humble/Dockerfile; then
+            changed=1
+          else
+            changed=0
+          fi
           echo "Has changed: $changed"
           echo "::set-output name=image-changed::$?"
   build-image:
