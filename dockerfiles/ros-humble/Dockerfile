@@ -9,4 +9,5 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/r
 RUN sudo apt update
 RUN sudo apt upgrade --yes
 RUN sudo DEBIAN_FRONTEND=noninteractive apt install --yes \
-        ros-humble-ros-base ros-humble-demo-nodes-{cpp,py}
+        ros-humble-ros-base ros-humble-demo-nodes-cpp \
+        ros-humble-demo-nodes-py
