@@ -11,4 +11,4 @@ RUN sudo apt upgrade --yes
 RUN sudo DEBIAN_FRONTEND=noninteractive apt install --yes \
         ros-humble-ros-base ros-humble-demo-nodes-cpp \
         ros-humble-demo-nodes-py psmisc \
-        python3-colcon-common-extensions
+        python3-colcon-common-extensions g++
