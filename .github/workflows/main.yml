@@ -14,6 +14,8 @@ jobs:
         run: |
           git diff --quiet --exit-code HEAD^ HEAD -- \
             dockerfiles/ros-humble/Dockerfile
+          changed=$?
+          echo "Has changed: $changed"
           echo "::set-output name=image-changed::$?"
   build-image:
     runs-on: ubuntu-latest
