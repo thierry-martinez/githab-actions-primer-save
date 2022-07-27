@@ -8,9 +8,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
       - name: Check changed
         run: |
-          git diff --quiet --exit-code HEAD^ HEAD \
+          git diff --quiet --exit-code HEAD^ HEAD -- \
             dockerfiles/ros-humble/Dockerfile
           echo "::set-output name=image-changed::$?"
   build-image:
