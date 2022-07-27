@@ -1,72 +1,73 @@
 name: main
 on: [push]
 jobs:
-  check-image-changed:
-    runs-on: ubuntu-latest
-    outputs:
-      image-changed: ${{ steps.check-changed.outputs.image-changed}}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-      - id: check-changed
-        name: Check changed
-        run: |
-          if git diff --quiet --exit-code HEAD^ HEAD -- \
-            dockerfiles/ros-humble/Dockerfile; then
-            changed=0
-          else
-            changed=1
-          fi
-          echo "Has changed: $changed"
-          echo "::set-output name=image-changed::$changed"
-  build-image:
-    runs-on: ubuntu-latest
-    needs: [check-image-changed]
-    if: needs.check-image-changed.outputs.image-changed == '1'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Build
-        run: |
-          docker build -t ghcr.io/thierry-martinez/ros-humble \
-            dockerfiles/ros-humble
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.packages_write }}
-      - name: Push
-        run: |
-          docker push ghcr.io/thierry-martinez/ros-humble
-  build-ubuntu:
-    runs-on: ubuntu-22.04
-    needs: [build-image]
-    if: always() && (needs.build-image.result == 'success' || needs.build-image.result == 'skipped')
-    container:
-      image: ghcr.io/thierry-martinez/ros-humble
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.packages_read }}
-    steps:
-      - name: Talker/listener example
-        run: |
-          . /opt/ros/humble/setup.sh
-          ros2 run demo_nodes_cpp talker &
-          ros2 run demo_nodes_cpp listener &
-          sleep 1 && killall ros2
+#  check-image-changed:
+#    runs-on: ubuntu-latest
+#    outputs:
+#      image-changed: ${{ steps.check-changed.outputs.image-changed}}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 2
+#      - id: check-changed
+#        name: Check changed
+#        run: |
+#          if git diff --quiet --exit-code HEAD^ HEAD -- \
+#            dockerfiles/ros-humble/Dockerfile; then
+#            changed=0
+#          else
+#            changed=1
+#          fi
+#          echo "Has changed: $changed"
+#          echo "::set-output name=image-changed::$changed"
+#  build-image:
+#    runs-on: ubuntu-latest
+#    needs: [check-image-changed]
+#    if: needs.check-image-changed.outputs.image-changed == '1'
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Build
+#        run: |
+#          docker build -t ghcr.io/thierry-martinez/ros-humble \
+#            dockerfiles/ros-humble
+#      - name: Login to GitHub Container Registry
+#        uses: docker/login-action@v2
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.packages_write }}
+#      - name: Push
+#        run: |
+#          docker push ghcr.io/thierry-martinez/ros-humble
+#  build-ubuntu:
+#    runs-on: ubuntu-22.04
+#    needs: [build-image]
+#    if: always() && (needs.build-image.result == 'success' || needs.build-image.result == 'skipped')
+#    container:
+#      image: ghcr.io/thierry-martinez/ros-humble
+#      credentials:
+#        username: ${{ github.actor }}
+#        password: ${{ secrets.packages_read }}
+#    steps:
+#      - name: Talker/listener example
+#        run: |
+#          . /opt/ros/humble/setup.sh
+#          ros2 run demo_nodes_cpp talker &
+#          ros2 run demo_nodes_cpp listener &
+#          sleep 1 && killall ros2
   build-windows:
     runs-on: windows-latest
     steps:
       - name: Setup ROS
         run: |
           curl -o ros2-humble.zip https://github.com/ros2/ros2/releases/download/release-humble-20220523/ros2-humble-20220523-windows-release-amd64.zip
-      - name: Installing prerequisites
-        run: |
-          choco install -y python --version 3.8.3
-          choco install -y vcredist2013 vcredist140
-          choco install -y visualstudio2019community --execution-timeout=0
-          choco install -y visualstudio2019-workload-nativedesktop
-          choco install -y cmake
+          ls
+#      - name: Installing prerequisites
+#        run: |
+#          choco install -y python --version 3.8.3
+#          choco install -y vcredist2013 vcredist140
+#          choco install -y visualstudio2019community --execution-timeout=0
+#          choco install -y visualstudio2019-workload-nativedesktop
+#          choco install -y cmake
