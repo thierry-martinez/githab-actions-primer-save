@@ -39,16 +39,14 @@ jobs:
           docker push ghcr.io/thierry-martinez/ros-humble
   build:
     runs-on: ubuntu-22.04
+    needs: [build-image]
+    if: always() && (needs.build-image.result == 'success' || needs.build-image.result == 'skipped')
+    container:
+      image: ghcr.io/thierry-martinez/ros-humble
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.packages_read }}
     steps:
-      - name: Preparing the environment
-        run: |
-          sudo curl -sSL \
-            https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
-            -o /usr/share/keyrings/ros-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-          sudo apt update
-          sudo apt upgrade --yes
-          sudo DEBIAN_FRONTEND=noninteractive apt install --yes ros-humble-ros-base ros-humble-demo-nodes-{cpp,py}
       - name: Talker/listener example
         run: |
           . /opt/ros/humble/setup.sh
