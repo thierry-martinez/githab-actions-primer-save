@@ -67,12 +67,8 @@ jobs:
           choco install -y visualstudio2019community --execution-timeout=0
           choco install -y visualstudio2019-workload-nativedesktop
           choco install -y cmake
-      - uses: suisei-cn/actions-download-file@v1.0.1
-        id: downloadfile
-        name: Download ROS
-        with:
-          url: https://github.com/ros2/ros2/releases/download/release-humble-20220523/ros2-humble-20220523-windows-release-amd64.zip
       - name: Setup ROS
         run: |
-          7z x ${{steps.downloadfile.filename}}
+          curl -o ros2-humble.zip https://github.com/ros2/ros2/releases/download/release-humble-20220523/ros2-humble-20220523-windows-release-amd64.zip
+          7z x ros2-humble.zip
           ros2-windows/local-setup.bat
