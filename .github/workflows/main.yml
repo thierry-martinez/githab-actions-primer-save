@@ -4,18 +4,21 @@ jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build
+        run: |
+          docker build -t ghcr.io/thierry-martinez/ros-humble \
+            dockerfiles/ros-humble
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.packages_write }}
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: "{{defaultContext}}:dockerfiles/ros-humble"
-          push: true
-          tags: ghcr.io/thierry-martinez/ros-humble
+      - name: Push
+        run: |
+          docker push ghcr.io/thierry-martinez/ros-humble
   build:
     runs-on: ubuntu-22.04
     steps:
