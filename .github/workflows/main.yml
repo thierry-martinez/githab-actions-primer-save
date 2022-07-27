@@ -41,7 +41,7 @@ jobs:
       - name: Push
         run: |
           docker push ghcr.io/thierry-martinez/ros-humble
-  build:
+  build-ubuntu:
     runs-on: ubuntu-22.04
     needs: [build-image]
     if: always() && (needs.build-image.result == 'success' || needs.build-image.result == 'skipped')
@@ -57,3 +57,22 @@ jobs:
           ros2 run demo_nodes_cpp talker &
           ros2 run demo_nodes_cpp listener &
           sleep 1 && killall ros2
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Installing prerequisites
+        run: |
+          choco install -y python --version 3.8.3
+          choco install -y vcredist2013 vcredist140
+          choco install -y visualstudio2019community --execution-timeout=0
+          choco install -y visualstudio2019-workload-nativedesktop
+          choco install -y cmake
+      - uses: suisei-cn/actions-download-file@v1.0.1
+        id: downloadfile
+        name: Download ROS
+        with:
+          url: https://github.com/ros2/ros2/releases/download/release-humble-20220523/ros2-humble-20220523-windows-release-amd64.zip
+      - name: Setup ROS
+        run: |
+          7z x ${{steps.downloadfile.filename}}
+          ros2-windows/local-setup.bat
