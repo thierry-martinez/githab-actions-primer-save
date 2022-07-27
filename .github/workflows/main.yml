@@ -88,6 +88,8 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Downloading ROS
         run: |
           curl -o ros2-humble.zip -L https://github.com/ros2/ros2/releases/download/release-humble-20220523/ros2-humble-20220523-windows-release-amd64.zip
@@ -100,8 +102,6 @@ jobs:
           choco install -y visualstudio2019-workload-nativedesktop
           choco install -y cmake
           pip install -U colcon-common-extensions
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Setup ROS
         run: |
           ros2-windows/setup.bat
