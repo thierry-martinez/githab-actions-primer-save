@@ -72,8 +72,9 @@ jobs:
             my_package.tar.gz
 
   release:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     needs: [build-ubuntu]
+    if: always() && needs.build-image.result == 'success'
     steps:
       - name: Download ubuntu artifact
         uses: actions/download-artifact@v3
